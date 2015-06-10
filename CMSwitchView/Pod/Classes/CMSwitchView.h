@@ -17,6 +17,9 @@
 /// If you want to have rounded dots and switch view or not, YES by default
 @property (nonatomic, assign) BOOL rounded;
 
+/// Information about selection
+@property (nonatomic, readonly) BOOL isOn;
+
 /// Width of the border, 1 by default
 @property (nonatomic, assign) CGFloat borderWidth;
 

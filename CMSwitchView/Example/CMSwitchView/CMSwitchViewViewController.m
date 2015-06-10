@@ -8,7 +8,7 @@
 #import <CMSwitchView.h>
 #import "CMSwitchViewViewController.h"
 
-@interface CMSwitchViewViewController ()
+@interface CMSwitchViewViewController () <CMSwitchViewDelegate>
 @property (nonatomic, strong) CMSwitchView* firstSwitch;
 @property (nonatomic, strong) CMSwitchView* secondSwitch;
 @property (nonatomic, strong) CMSwitchView* thirdSwitch;
@@ -27,6 +27,7 @@
     self.firstSwitch.tintColor = [UIColor clearColor];
     self.firstSwitch.dotBorderWidth = 3.0f;
     self.firstSwitch.dotBorderColor = [UIColor greenColor];
+    self.firstSwitch.delegate = self;
     [self.view addSubview:self.firstSwitch];
     
     self.secondSwitch = [[CMSwitchView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, self.firstSwitch.frame.size.height+self.firstSwitch.frame.origin.y+100, 200, 60)];
@@ -43,6 +44,11 @@
     self.thirdSwitch.dotColor = [UIColor redColor];
     self.thirdSwitch.color = [UIColor whiteColor];
     [self.view addSubview:self.thirdSwitch];
+}
+
+- (void)switchValueChanged:(id)sender andNewValue:(BOOL)value
+{
+    NSLog(@"%hhd",value);
 }
 
 @end

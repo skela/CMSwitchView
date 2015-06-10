@@ -45,7 +45,7 @@
 
 @implementation CMSwitchView
 
-#pragma mark - setters
+#pragma mark - properties
 
 - (void)setRounded:(BOOL)rounded
 {
@@ -106,6 +106,10 @@
 - (void)setDotBorderColor:(UIColor *)dotBorderColor
 {
     _dotView.layer.borderColor = dotBorderColor.CGColor;
+}
+
+- (BOOL)isOn {
+    return _isSelected;
 }
 
 #pragma mark - LifeCycle
