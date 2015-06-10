@@ -100,11 +100,13 @@
 
 - (void)setDotBorderWidth:(CGFloat)dotBorderWidth
 {
+    _dotBorderWidth = dotBorderWidth;
     _dotView.layer.borderWidth = dotBorderWidth;
 }
 
 - (void)setDotBorderColor:(UIColor *)dotBorderColor
 {
+    _dotBorderColor = dotBorderColor;
     _dotView.layer.borderColor = dotBorderColor.CGColor;
 }
 
@@ -160,6 +162,9 @@
     self.dotBorderWidth = .0f;
     self.dotBorderColor = [UIColor clearColor];
     self.animDuration = 0.6;
+    self.selectedBorderColor = self.borderColor;
+    self.selectedDotColor = self.dotColor;
+    self.selectedDotBorderColor = self.dotBorderColor;
     self.layer.masksToBounds = NO;
 }
 
@@ -210,6 +215,9 @@
         [UIView animateWithDuration:self.animDuration animations:^{
             [self.dotView setFrame:CGRectMake([self semiHeight]-[self.dotView semiWidth], self.dotView.frame.origin.y, self.dotView.frame.size.width, [self.dotView height])];
             self.switchView.backgroundColor = self.color;
+            self.switchView.layer.borderColor = self.borderColor.CGColor;
+            self.dotView.backgroundColor = self.dotColor;
+            self.dotView.layer.borderColor = self.dotBorderColor.CGColor;
         }];
         
     } else {
@@ -217,6 +225,9 @@
         [UIView animateWithDuration:self.animDuration animations:^{
             [self.dotView setFrame:CGRectMake([self width]-[self semiHeight]-[self.dotView semiWidth], self.dotView.frame.origin.y, self.dotView.frame.size.width, [self.dotView height])];
             self.switchView.backgroundColor = self.tintColor;
+            self.switchView.layer.borderColor = self.selectedBorderColor.CGColor;
+            self.dotView.backgroundColor = self.selectedDotColor;
+            self.dotView.layer.borderColor = self.selectedDotBorderColor.CGColor;
         }];
     }
     if (self.delegate)

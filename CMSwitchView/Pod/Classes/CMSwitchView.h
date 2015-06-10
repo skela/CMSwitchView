@@ -29,9 +29,6 @@
 /// color of the background of the switch view, clearColor by default
 @property (nonatomic, strong) UIColor* color;
 
-/// color of the background of the switch view when switched, clearColor by default
-@property (nonatomic, strong) UIColor* tintColor;
-
 /// width and height of the dot, frameHeight-2 by default
 @property (nonatomic, assign) CGFloat dotWeight;
 
@@ -46,6 +43,18 @@
 
 /// duration of the animation, 0.6 by default
 @property (nonatomic, assign) NSTimeInterval animDuration;
+
+/// color of the background of the switch view when switched, clearColor by default
+@property (nonatomic, strong) UIColor* tintColor;
+
+/// color of the dot's background when switch is selected. Default is the same jak dotColor property
+@property (nonatomic, strong) UIColor* selectedDotColor;
+
+/// color of the dot's border color when switch is selected.Default is the same jak dotBorderColor property
+@property (nonatomic, strong) UIColor* selectedDotBorderColor;
+
+/// color of the border when switch is selected. Default is the same liek borderColor.
+@property (nonatomic, strong) UIColor* selectedBorderColor;
 
 /// delegate to be set
 @property (nonatomic, weak) id <CMSwitchViewDelegate> delegate;
