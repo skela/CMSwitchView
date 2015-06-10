@@ -35,6 +35,12 @@
 /// color of the dot, white by default
 @property (nonatomic, strong) UIColor* dotColor;
 
+/// Width of the dot's border, 0 by default
+@property (nonatomic, assign) CGFloat dotBorderWidth;
+
+/// Color of the dot's border, clear by default
+@property (nonatomic, strong) UIColor* dotBorderColor;
+
 /// duration of the animation, 0.6 by default
 @property (nonatomic, assign) NSTimeInterval animDuration;
 

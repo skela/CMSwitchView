@@ -98,6 +98,16 @@
     _dotView.backgroundColor = _dotColor;
 }
 
+- (void)setDotBorderWidth:(CGFloat)dotBorderWidth
+{
+    _dotView.layer.borderWidth = dotBorderWidth;
+}
+
+- (void)setDotBorderColor:(UIColor *)dotBorderColor
+{
+    _dotView.layer.borderColor = dotBorderColor.CGColor;
+}
+
 #pragma mark - LifeCycle
 
 - (id)initWithFrame:(CGRect)frame
@@ -143,6 +153,8 @@
     self.tintColor = [UIColor clearColor];
     self.dotWeight = self.frame.size.height - 10.f;
     self.dotColor = [UIColor whiteColor];
+    self.dotBorderWidth = .0f;
+    self.dotBorderColor = [UIColor clearColor];
     self.animDuration = 0.6;
     self.layer.masksToBounds = NO;
 }
