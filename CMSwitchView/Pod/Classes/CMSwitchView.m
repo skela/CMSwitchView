@@ -178,14 +178,15 @@
         ((CGRectGetMidX(self.dotView.frame) + translation.x) <= [self width] - [self semiHeight]))
         [self.dotView setFrame:CGRectMake(self.dotView.frame.origin.x + translation.x, self.dotView.frame.origin.y, self.dotView.frame.size.width, [self.dotView height])];
     
-    if ((self.isSelected == NO && (CGRectGetMidX(self.dotView.frame) > [self semiWidth])) ||
-        (self.isSelected == YES && (CGRectGetMidX(self.dotView.frame) < [self semiWidth]))) {
-        self.isSelected = !self.isSelected;
-        if (self.delegate)
-            [self.delegate switchValueChanged:self andNewValue:self.isSelected];
-    }
-    
     if (panGesture.state == UIGestureRecognizerStateEnded) {
+        
+        if ((self.isSelected == NO && (CGRectGetMidX(self.dotView.frame) > [self semiWidth])) ||
+            (self.isSelected == YES && (CGRectGetMidX(self.dotView.frame) < [self semiWidth]))) {
+            self.isSelected = !self.isSelected;
+            if (self.delegate)
+                [self.delegate switchValueChanged:self andNewValue:self.isSelected];
+        }
+        
         if (self.isSelected == NO && (CGRectGetMidX(self.dotView.frame) > [self semiWidth])) {
             [self switchClicked];
         } else if (self.isSelected == NO && (CGRectGetMidX(self.dotView.frame) < [self semiWidth])) {
@@ -201,7 +202,12 @@
 }
 
 - (void)tapGestureDetected:(UITapGestureRecognizer *)tapGesture {
+    BOOL prev = self.isSelected;
     [self switchClicked];
+    if (prev != self.isSelected) {
+        if (self.delegate)
+            [self.delegate switchValueChanged:self andNewValue:self.isSelected];
+    }
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -222,8 +228,6 @@
         self.isSelected = YES;
         [self performAnimationForSelected:YES];
     }
-    if (self.delegate)
-        [self.delegate switchValueChanged:self andNewValue:self.isSelected];
 }
 
 - (void)performAnimationForSelected:(BOOL)selected {
