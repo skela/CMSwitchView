@@ -151,7 +151,6 @@
     pan.delegate = self;
     [_switchView addGestureRecognizer:pan];
     
-    [self setSelected:NO animated:NO];
     self.rounded                = YES;
     self.borderWidth            = 1.f;
     self.borderColor            = [UIColor whiteColor];
@@ -257,13 +256,17 @@
 }
 
 - (void)setSelected:(BOOL)boolean animated:(BOOL)animated {
-    NSTimeInterval duration = self.animDuration;
-    if (animated == NO) {
-        self.animDuration = 0.f;
-        [self switchClicked];
-        self.animDuration = duration;
-    } else
-        [self switchClicked];
+    if (boolean != self.isSelected) {
+        self.isSelected = boolean;
+        if (animated == NO) {
+            NSTimeInterval duration = self.animDuration;
+            self.animDuration = 0;
+            [self performAnimationForSelected:boolean];
+            self.animDuration = duration;
+        } else {
+            [self performAnimationForSelected:boolean];
+        }
+    }
 }
 
 @end

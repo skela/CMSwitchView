@@ -26,13 +26,15 @@
     self.firstSwitch.color = [UIColor whiteColor];
     self.firstSwitch.dotBorderWidth = 3.0f;
     self.firstSwitch.dotBorderColor = [UIColor greenColor];
-    
-    self.firstSwitch.delegate = self;
-    
     self.firstSwitch.tintColor = [UIColor redColor];
     self.firstSwitch.selectedDotColor = [UIColor purpleColor];
     self.firstSwitch.selectedDotBorderColor = [UIColor whiteColor];
     self.firstSwitch.selectedBorderColor = [UIColor yellowColor];
+    self.firstSwitch.delegate = self;
+    
+    [self.firstSwitch setSelected:YES animated:NO];
+    
+    
     [self.view addSubview:self.firstSwitch];
     
     self.secondSwitch = [[CMSwitchView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, self.firstSwitch.frame.size.height+self.firstSwitch.frame.origin.y+100, 200, 60)];
