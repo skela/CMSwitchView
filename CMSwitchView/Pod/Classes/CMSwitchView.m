@@ -144,28 +144,28 @@
     [_dotView setBackgroundColor:self.dotColor];
     [_switchView addSubview:self.dotView];
     
-    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(switchClicked)];
+    UITapGestureRecognizer* tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapGestureDetected:)];
     [_switchView addGestureRecognizer:tap];
     
     UIPanGestureRecognizer* pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureDetected:)];
     pan.delegate = self;
     [_switchView addGestureRecognizer:pan];
     
-    self.isSelected = NO;
-    self.rounded = YES;
-    self.borderWidth = 1.f;
-    self.borderColor = [UIColor whiteColor];
-    self.color = [UIColor clearColor];
-    self.tintColor = [UIColor clearColor];
-    self.dotWeight = self.frame.size.height - 10.f;
-    self.dotColor = [UIColor whiteColor];
-    self.dotBorderWidth = .0f;
-    self.dotBorderColor = [UIColor clearColor];
-    self.animDuration = 0.6;
-    self.selectedBorderColor = self.borderColor;
-    self.selectedDotColor = self.dotColor;
+    [self setSelected:NO animated:NO];
+    self.rounded                = YES;
+    self.borderWidth            = 1.f;
+    self.borderColor            = [UIColor whiteColor];
+    self.color                  = [UIColor clearColor];
+    self.tintColor              = [UIColor clearColor];
+    self.dotWeight              = self.frame.size.height - 10.f;
+    self.dotColor               = [UIColor whiteColor];
+    self.dotBorderWidth         = .0f;
+    self.dotBorderColor         = [UIColor clearColor];
+    self.animDuration           = 0.6;
+    self.selectedBorderColor    = self.borderColor;
+    self.selectedDotColor       = self.dotColor;
     self.selectedDotBorderColor = self.dotBorderColor;
-    self.layer.masksToBounds = NO;
+    self.layer.masksToBounds    = NO;
 }
 
 #pragma mark - Gesture
@@ -173,7 +173,7 @@
 - (void)panGestureDetected:(UIPanGestureRecognizer*)panGesture
 {
     CGPoint translation = [panGesture translationInView:self.switchView];
-
+    
     if (((CGRectGetMidX(self.dotView.frame) + translation.x) >= [self semiHeight]) &&
         ((CGRectGetMidX(self.dotView.frame) + translation.x) <= [self width] - [self semiHeight]))
         [self.dotView setFrame:CGRectMake(self.dotView.frame.origin.x + translation.x, self.dotView.frame.origin.y, self.dotView.frame.size.width, [self.dotView height])];
@@ -189,21 +189,26 @@
         if (self.isSelected == NO && (CGRectGetMidX(self.dotView.frame) > [self semiWidth])) {
             [self switchClicked];
         } else if (self.isSelected == NO && (CGRectGetMidX(self.dotView.frame) < [self semiWidth])) {
-
-            [UIView animateWithDuration:self.animDuration animations:^{
-                [self.dotView setFrame:CGRectMake([self semiHeight]-[self.dotView semiWidth], self.dotView.frame.origin.y, self.dotView.frame.size.width, [self.dotView height])];
-                self.switchView.backgroundColor = self.color;
-            }];
+            [self performAnimationForSelected:NO];
         } else if (self.isSelected == YES && (CGRectGetMidX(self.dotView.frame) < [self semiWidth])) {
             [self switchClicked];
         } else if (self.isSelected == YES && (CGRectGetMidX(self.dotView.frame) > [self semiWidth])) {
-            [UIView animateWithDuration:self.animDuration animations:^{
-                [self.dotView setFrame:CGRectMake(([self width]-[self semiHeight])-[self.dotView semiHeight], self.dotView.frame.origin.y, self.dotView.frame.size.width, [self.dotView height])];
-                self.switchView.backgroundColor = self.tintColor;
-            }];
+            [self performAnimationForSelected:YES];
         }
     }
+    
     [panGesture setTranslation:CGPointZero inView:self.switchView];
+}
+
+- (void)tapGestureDetected:(UITapGestureRecognizer *)tapGesture {
+    [self switchClicked];
+}
+
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    [super touchesBegan:touches withEvent:event];
+    if (self.touchesBeganBlock) {
+        self.touchesBeganBlock(self.switchView, self.dotView);
+    }
 }
 
 #pragma mark - Action
@@ -212,26 +217,39 @@
 {
     if (self.isSelected == YES) {
         self.isSelected = NO;
-        [UIView animateWithDuration:self.animDuration animations:^{
-            [self.dotView setFrame:CGRectMake([self semiHeight]-[self.dotView semiWidth], self.dotView.frame.origin.y, self.dotView.frame.size.width, [self.dotView height])];
-            self.switchView.backgroundColor = self.color;
-            self.switchView.layer.borderColor = self.borderColor.CGColor;
-            self.dotView.backgroundColor = self.dotColor;
-            self.dotView.layer.borderColor = self.dotBorderColor.CGColor;
-        }];
-        
-    } else {
+        [self performAnimationForSelected:NO];
+    } else if(self.isSelected == NO) {
         self.isSelected = YES;
-        [UIView animateWithDuration:self.animDuration animations:^{
-            [self.dotView setFrame:CGRectMake([self width]-[self semiHeight]-[self.dotView semiWidth], self.dotView.frame.origin.y, self.dotView.frame.size.width, [self.dotView height])];
-            self.switchView.backgroundColor = self.tintColor;
-            self.switchView.layer.borderColor = self.selectedBorderColor.CGColor;
-            self.dotView.backgroundColor = self.selectedDotColor;
-            self.dotView.layer.borderColor = self.selectedDotBorderColor.CGColor;
-        }];
+        [self performAnimationForSelected:YES];
     }
     if (self.delegate)
         [self.delegate switchValueChanged:self andNewValue:self.isSelected];
+}
+
+- (void)performAnimationForSelected:(BOOL)selected {
+    if (!selected) {
+        if (self.willDeselectBlock) {
+            self.willDeselectBlock(self.switchView, self.dotView);
+        }
+        [UIView animateWithDuration:self.animDuration animations:^{
+            [self.dotView setFrame:CGRectMake([self semiHeight]-[self.dotView semiWidth], self.dotView.frame.origin.y, self.dotView.frame.size.width, [self.dotView height])];
+            self.switchView.backgroundColor   = self.color;
+            self.switchView.layer.borderColor = self.borderColor.CGColor;
+            self.dotView.backgroundColor      = self.dotColor;
+            self.dotView.layer.borderColor    = self.dotBorderColor.CGColor;
+        }];
+    } else {
+        if (self.willSelectBlock) {
+            self.willSelectBlock(self.switchView, self.dotView);
+        }
+        [UIView animateWithDuration:self.animDuration animations:^{
+            [self.dotView setFrame:CGRectMake([self width]-[self semiHeight]-[self.dotView semiWidth], self.dotView.frame.origin.y, self.dotView.frame.size.width, [self.dotView height])];
+            self.switchView.backgroundColor   = self.tintColor;
+            self.switchView.layer.borderColor = self.selectedBorderColor.CGColor;
+            self.dotView.backgroundColor      = self.selectedDotColor;
+            self.dotView.layer.borderColor    = self.selectedDotBorderColor.CGColor;
+        }];
+    }
 }
 
 - (void)setSelected:(BOOL)boolean animated:(BOOL)animated {

@@ -7,9 +7,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void (^CMSwitchViewBlock)(UIView *switchView, UIView *dotView);
+
 @protocol CMSwitchViewDelegate <NSObject>
 /// Called when the switch view is clicked or when you move the dot after the middle with the pan gesture
 - (void)switchValueChanged:(id)sender andNewValue:(BOOL)value;
+
 @end
 
 @interface CMSwitchView : UIView<UIGestureRecognizerDelegate>
@@ -55,6 +58,10 @@
 
 /// color of the border when switch is selected. Default is the same liek borderColor.
 @property (nonatomic, strong) UIColor* selectedBorderColor;
+
+@property (strong, nonatomic) CMSwitchViewBlock willSelectBlock;
+@property (strong, nonatomic) CMSwitchViewBlock willDeselectBlock;
+@property (strong, nonatomic) CMSwitchViewBlock touchesBeganBlock;
 
 /// delegate to be set
 @property (nonatomic, weak) id <CMSwitchViewDelegate> delegate;
