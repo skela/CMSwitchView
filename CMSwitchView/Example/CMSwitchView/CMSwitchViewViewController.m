@@ -31,10 +31,6 @@
     self.firstSwitch.selectedDotBorderColor = [UIColor whiteColor];
     self.firstSwitch.selectedBorderColor = [UIColor yellowColor];
     self.firstSwitch.delegate = self;
-    
-    [self.firstSwitch setSelected:YES animated:NO];
-    
-    
     [self.view addSubview:self.firstSwitch];
     
     self.secondSwitch = [[CMSwitchView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-100, self.firstSwitch.frame.size.height+self.firstSwitch.frame.origin.y+100, 200, 60)];
@@ -42,6 +38,7 @@
     self.secondSwitch.color = [UIColor clearColor];
     self.secondSwitch.tintColor = [UIColor clearColor];
     self.secondSwitch.dotWeight = 20.f;
+    [self.secondSwitch addTarget:self action:@selector(changedValue:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.secondSwitch];
     
     self.thirdSwitch = [[CMSwitchView alloc] initWithFrame:CGRectMake(self.view.frame.size.width/2-50, self.secondSwitch.frame.size.height+self.secondSwitch.frame.origin.y+100, 100, 30)];
@@ -50,12 +47,25 @@
     self.thirdSwitch.borderColor = [UIColor redColor];
     self.thirdSwitch.dotColor = [UIColor redColor];
     self.thirdSwitch.color = [UIColor whiteColor];
+    [self.thirdSwitch addTarget:self action:@selector(changedValue:) forControlEvents:UIControlEventValueChanged];
     [self.view addSubview:self.thirdSwitch];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [self.firstSwitch setOn:YES animated:NO];
 }
 
 - (void)switchValueChanged:(id)sender andNewValue:(BOOL)value
 {
-    NSLog(@"%hhd",value);
+    NSLog(@"Delegate informed of change %d",value);
+}
+
+- (void)changedValue:(CMSwitchView*)sw
+{
+    NSLog(@"Control value changed %d",sw.on);
 }
 
 @end

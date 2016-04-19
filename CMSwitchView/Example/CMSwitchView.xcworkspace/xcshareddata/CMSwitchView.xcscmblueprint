@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "97975AAE45C3B46A727D8FD6918FB2156453C48F",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "97975AAE45C3B46A727D8FD6918FB2156453C48F" : 0,
+    "6F84E147E941CABC894C425670E2951C988BA7AB" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "26AEE4C8-9D56-4559-9D3F-E8CC3377571C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "97975AAE45C3B46A727D8FD6918FB2156453C48F" : "cmswitchview\/",
+    "6F84E147E941CABC894C425670E2951C988BA7AB" : ".."
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "CMSwitchView",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "CMSwitchView\/Example\/CMSwitchView.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:vlad259\/spreadco.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "6F84E147E941CABC894C425670E2951C988BA7AB"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:skela\/CMSwitchView.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "97975AAE45C3B46A727D8FD6918FB2156453C48F"
+    }
+  ]
+}

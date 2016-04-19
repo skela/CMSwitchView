@@ -110,8 +110,14 @@
     _dotView.layer.borderColor = dotBorderColor.CGColor;
 }
 
-- (BOOL)isOn {
+- (BOOL)on
+{
     return _isSelected;
+}
+
+- (void)setOn:(BOOL)on
+{
+    [self setOn:on animated:NO];
 }
 
 #pragma mark - LifeCycle
@@ -167,6 +173,13 @@
     self.layer.masksToBounds    = NO;
 }
 
+- (void)changedValue
+{
+    if (self.delegate)
+        [self.delegate switchValueChanged:self andNewValue:self.isSelected];
+    [self sendActionsForControlEvents:UIControlEventValueChanged];
+}
+
 #pragma mark - Gesture
 
 - (void)panGestureDetected:(UIPanGestureRecognizer*)panGesture
@@ -182,18 +195,17 @@
         if ((self.isSelected == NO && (CGRectGetMidX(self.dotView.frame) > [self semiWidth])) ||
             (self.isSelected == YES && (CGRectGetMidX(self.dotView.frame) < [self semiWidth]))) {
             self.isSelected = !self.isSelected;
-            if (self.delegate)
-                [self.delegate switchValueChanged:self andNewValue:self.isSelected];
+            [self changedValue];
         }
         
         if (self.isSelected == NO && (CGRectGetMidX(self.dotView.frame) > [self semiWidth])) {
             [self switchClicked];
         } else if (self.isSelected == NO && (CGRectGetMidX(self.dotView.frame) < [self semiWidth])) {
-            [self performAnimationForSelected:NO];
+            [self performAnimationForOn:NO];
         } else if (self.isSelected == YES && (CGRectGetMidX(self.dotView.frame) < [self semiWidth])) {
             [self switchClicked];
         } else if (self.isSelected == YES && (CGRectGetMidX(self.dotView.frame) > [self semiWidth])) {
-            [self performAnimationForSelected:YES];
+            [self performAnimationForOn:YES];
         }
     }
     
@@ -203,10 +215,8 @@
 - (void)tapGestureDetected:(UITapGestureRecognizer *)tapGesture {
     BOOL prev = self.isSelected;
     [self switchClicked];
-    if (prev != self.isSelected) {
-        if (self.delegate)
-            [self.delegate switchValueChanged:self andNewValue:self.isSelected];
-    }
+    if (prev != self.isSelected)
+        [self changedValue];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
@@ -220,16 +230,20 @@
 
 - (void)switchClicked
 {
-    if (self.isSelected == YES) {
+    if (self.isSelected == YES)
+    {
         self.isSelected = NO;
-        [self performAnimationForSelected:NO];
-    } else if(self.isSelected == NO) {
+        [self performAnimationForOn:NO];
+    }
+    else if(self.isSelected == NO)
+    {
         self.isSelected = YES;
-        [self performAnimationForSelected:YES];
+        [self performAnimationForOn:YES];
     }
 }
 
-- (void)performAnimationForSelected:(BOOL)selected {
+- (void)performAnimationForOn:(BOOL)selected
+{
     if (!selected) {
         if (self.willDeselectBlock) {
             self.willDeselectBlock(self.switchView, self.dotView);
@@ -255,16 +269,21 @@
     }
 }
 
-- (void)setSelected:(BOOL)boolean animated:(BOOL)animated {
-    if (boolean != self.isSelected) {
+- (void)setOn:(BOOL)boolean animated:(BOOL)animated
+{
+    if (boolean != self.isSelected)
+    {
         self.isSelected = boolean;
-        if (animated == NO) {
+        if (animated == NO)
+        {
             NSTimeInterval duration = self.animDuration;
             self.animDuration = 0;
-            [self performAnimationForSelected:boolean];
+            [self performAnimationForOn:boolean];
             self.animDuration = duration;
-        } else {
-            [self performAnimationForSelected:boolean];
+        }
+        else
+        {
+            [self performAnimationForOn:boolean];
         }
     }
 }

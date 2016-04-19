@@ -15,13 +15,13 @@ typedef void (^CMSwitchViewBlock)(UIView *switchView, UIView *dotView);
 
 @end
 
-@interface CMSwitchView : UIView<UIGestureRecognizerDelegate>
+@interface CMSwitchView : UIControl<UIGestureRecognizerDelegate>
 
 /// If you want to have rounded dots and switch view or not, YES by default
 @property (nonatomic, assign) BOOL rounded;
 
 /// Information about selection
-@property (nonatomic, readonly) BOOL isOn;
+@property (nonatomic, readwrite) BOOL on;
 
 /// Width of the border, 1 by default
 @property (nonatomic, assign) CGFloat borderWidth;
@@ -67,6 +67,8 @@ typedef void (^CMSwitchViewBlock)(UIView *switchView, UIView *dotView);
 @property (nonatomic, weak) id <CMSwitchViewDelegate> delegate;
 
 /// set the switch YES or NO, with animation or not
-- (void)setSelected:(BOOL)boolean animated:(BOOL)animated;
+- (void)setOn:(BOOL)boolean animated:(BOOL)animated;
+
+- (id)initWithFrame:(CGRect)frame;
 
 @end
