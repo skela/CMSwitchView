@@ -170,6 +170,13 @@
     self.selectedBorderColor    = self.borderColor;
     self.selectedDotColor       = self.dotColor;
     self.selectedDotBorderColor = self.dotBorderColor;
+    
+    UIColor *disabled = [UIColor lightGrayColor];
+    self.disabledBackgroundColor = disabled;
+    self.disabledBorderColor    = disabled;
+    self.disabledDotColor       = disabled;
+    self.disabledDotBorderColor = disabled;
+    
     self.layer.masksToBounds    = NO;
 }
 
@@ -201,11 +208,11 @@
         if (self.isSelected == NO && (CGRectGetMidX(self.dotView.frame) > [self semiWidth])) {
             [self switchClicked];
         } else if (self.isSelected == NO && (CGRectGetMidX(self.dotView.frame) < [self semiWidth])) {
-            [self performAnimationForOn:NO];
+            [self reloadColors:NO animated:YES];
         } else if (self.isSelected == YES && (CGRectGetMidX(self.dotView.frame) < [self semiWidth])) {
             [self switchClicked];
         } else if (self.isSelected == YES && (CGRectGetMidX(self.dotView.frame) > [self semiWidth])) {
-            [self performAnimationForOn:YES];
+            [self reloadColors:YES animated:YES];
         }
     }
     
@@ -233,36 +240,50 @@
     if (self.isSelected == YES)
     {
         self.isSelected = NO;
-        [self performAnimationForOn:NO];
+        [self reloadColors:NO animated:YES];
     }
     else if(self.isSelected == NO)
     {
         self.isSelected = YES;
-        [self performAnimationForOn:YES];
+        [self reloadColors:YES animated:YES];
     }
 }
 
-- (void)performAnimationForOn:(BOOL)selected
+- (void)setEnabled:(BOOL)enabled
 {
-    if (!selected) {
-        if (self.willDeselectBlock) {
+    [super setEnabled:enabled];
+    
+    [self reloadColors:self.selected animated:NO];
+}
+
+- (void)reloadColors:(BOOL)selected animated:(BOOL)animated
+{
+    if (!selected)
+    {
+        if (self.willDeselectBlock)
+        {
             self.willDeselectBlock(self.switchView, self.dotView);
         }
-        [UIView animateWithDuration:self.animDuration animations:^{
+        [UIView animateWithDuration:animated?self.animDuration:0 animations:^
+        {
             [self.dotView setFrame:CGRectMake([self semiHeight]-[self.dotView semiWidth], self.dotView.frame.origin.y, self.dotView.frame.size.width, [self.dotView height])];
             self.switchView.backgroundColor   = self.color;
-            self.switchView.layer.borderColor = self.borderColor.CGColor;
-            self.dotView.backgroundColor      = self.dotColor;
-            self.dotView.layer.borderColor    = self.dotBorderColor.CGColor;
+            self.switchView.layer.borderColor = self.enabled ? self.borderColor.CGColor : self.disabledBorderColor.CGColor;
+            self.dotView.backgroundColor      = self.enabled ? self.dotColor : self.disabledDotColor;
+            self.dotView.layer.borderColor    = self.enabled ? self.dotBorderColor.CGColor : self.disabledDotBorderColor.CGColor;
         }];
-    } else {
-        if (self.willSelectBlock) {
+    }
+    else
+    {
+        if (self.willSelectBlock)
+        {
             self.willSelectBlock(self.switchView, self.dotView);
         }
-        [UIView animateWithDuration:self.animDuration animations:^{
+        [UIView animateWithDuration:animated?self.animDuration:0 animations:^
+        {
             [self.dotView setFrame:CGRectMake([self width]-[self semiHeight]-[self.dotView semiWidth], self.dotView.frame.origin.y, self.dotView.frame.size.width, [self.dotView height])];
-            self.switchView.backgroundColor   = self.tintColor;
-            self.switchView.layer.borderColor = self.selectedBorderColor.CGColor;
+            self.switchView.backgroundColor   = self.enabled ? self.tintColor : self.disabledBackgroundColor;
+            self.switchView.layer.borderColor = self.enabled ? self.selectedBorderColor.CGColor : self.disabledBorderColor.CGColor;
             self.dotView.backgroundColor      = self.selectedDotColor;
             self.dotView.layer.borderColor    = self.selectedDotBorderColor.CGColor;
         }];
@@ -274,17 +295,7 @@
     if (boolean != self.isSelected)
     {
         self.isSelected = boolean;
-        if (animated == NO)
-        {
-            NSTimeInterval duration = self.animDuration;
-            self.animDuration = 0;
-            [self performAnimationForOn:boolean];
-            self.animDuration = duration;
-        }
-        else
-        {
-            [self performAnimationForOn:boolean];
-        }
+        [self reloadColors:boolean animated:animated];
     }
 }
 

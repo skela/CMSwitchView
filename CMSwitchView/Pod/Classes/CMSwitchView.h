@@ -59,6 +59,19 @@ typedef void (^CMSwitchViewBlock)(UIView *switchView, UIView *dotView);
 /// color of the border when switch is selected. Default is the same liek borderColor.
 @property (nonatomic, strong) UIColor* selectedBorderColor;
 
+/// color of the switch background when the switch is disabled. Default is [UIColor lightGrayColor]
+@property (nonatomic, strong) UIColor* disabledBackgroundColor;
+
+/// color of the dot's background when the switch is disabled. Default is [UIColor lightGrayColor]
+@property (nonatomic, strong) UIColor* disabledDotColor;
+
+/// color of the dot's border color when the switch is disabled. Default is [UIColor lightGrayColor]
+@property (nonatomic, strong) UIColor* disabledDotBorderColor;
+
+/// color of the border when the switch is disabled.  Default is [UIColor lightGrayColor]
+@property (nonatomic, strong) UIColor* disabledBorderColor;
+
+
 @property (strong, nonatomic) CMSwitchViewBlock willSelectBlock;
 @property (strong, nonatomic) CMSwitchViewBlock willDeselectBlock;
 @property (strong, nonatomic) CMSwitchViewBlock touchesBeganBlock;
